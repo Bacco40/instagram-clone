@@ -10,7 +10,12 @@ import {getAuth} from 'firebase/auth';
     collection,
     addDoc,
     updateDoc,
-    serverTimestamp
+    serverTimestamp,
+    query,
+    doc,
+    where,
+    getDocs,
+    arrayUnion
   } from 'firebase/firestore';
   import {
     getStorage,
@@ -41,10 +46,22 @@ function NewPost({closeUploadForm, data, profilePosts}) {
                 profilePic: data.profilePic,
                 picture: "",
                 likes: [],
-                comments:[{}],
+                comments:[],
                 description: description.value,
                 date: serverTimestamp(),
                 link:""
+            });
+            let accountRef = query(collection(getFirestore(), 'Accounts'), where("mail", "==", getAuth().currentUser.email ));
+            const querySnapshot = await getDocs(accountRef);
+            let reference=null;
+            querySnapshot.forEach((doc) => {
+                reference=doc.id;
+            });
+            accountRef=doc(getFirestore(), "Accounts", `${reference}`);
+            await updateDoc(accountRef,{
+                posts: arrayUnion({
+                    postId:postRef.id
+                })
             });
             const filePath = `${getAuth().currentUser.uid}/${postRef.id}/${postFile.name}`;
             const newImageRef = ref(getStorage(), filePath);

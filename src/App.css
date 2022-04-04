@@ -1,0 +1,607 @@
+html, body, #root{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+#root::-webkit-scrollbar {
+    display: none;
+}
+.App{
+    height: 100%;
+}
+.homeNav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0px 3px 2px rgb(175, 172, 172);
+    width: 100%;
+}
+.Title, .formTitle, .formDesc{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 30px;
+    font-weight: bold;
+}
+a{
+    text-decoration: none;
+}
+.logo{
+    height: 30px;
+}
+.userOptions{
+    display: flex;
+    gap: 25px;
+    list-style-type: none;
+    font-size: 22px;
+}
+li{
+    color: rgb(209, 202, 202);
+}
+.search{
+    font-size: 18px;
+    padding-left: 30px;
+    border-radius: 10px;
+    border: 1px solid rgb(209, 202, 202) ;
+    color: rgb(150, 145, 145);
+}
+
+label[for="search"]{
+    color: rgb(209, 202, 202) ;
+    position:relative;
+    left: 22px;
+}
+#username{
+    padding-left: 5px;
+}
+.homeContent{
+    padding: 40px 18% 0px 15%;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    height: 100%;
+}
+.logIn{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#signUp,#logIn,#save,#preview, #addPic, #edit, .uploadBtn{
+    font-size: 16px;
+    font-weight: bold;
+    border: 0;
+    border-radius: 25px;
+    padding: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+#signUp,#save, .uploadBtn{
+    color: white;
+    background-color: rgb(27, 26, 26);
+}
+#logIn,#preview, #addPic, #edit{
+    background-color: white;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+}
+.registerContent, .createUserContent{
+    height: 89vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.registrationForm{
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    border-radius: 15px;
+    padding: 40px;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px; 
+}
+.logoBig, .profilePic, .homeProfilePic{
+    height: 80px;
+    width: 80px;
+}
+.homeProfilePic{
+    border-radius: 50%;
+}
+.formTitle{
+    width: 100%;
+    justify-content: start;
+    gap: 10px;
+}
+.formError{
+    font-size: 12px;
+    padding-left: 5px;
+    padding-top: 2px;
+    text-align: start;
+    color: rgb(175, 172, 172);
+}
+.formMessage{
+    font-size: 14px;
+    color: rgb(175, 172, 172); 
+}
+.formLogIn{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 30px;
+    width: 100%;
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.regForm{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%; 
+}
+.formLabel{
+    font-weight: bold;
+    align-self: start;
+    color: rgb(150, 145, 145);
+    padding-top: 10px;
+}
+#bio, #displayName{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 5px;
+}
+#bio{
+    resize: none;
+}
+.backgroundForm, .coverContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%; 
+    height: 140px;
+    cursor: pointer;
+    overflow: hidden;
+}
+#backgroundForm{
+    flex:none;
+    width: 100%; 
+}
+.createUserForm{
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    align-self: center;
+    width: 40%; 
+    border-radius: 15px;
+    padding-top: 20%;
+    padding: 40px;
+}
+.formDesc{
+    width: 100%; 
+    height: 40px;
+}
+.profilePic{
+    position: relative;
+    bottom: 25px;
+    left: 2%;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+#profilePic{
+   height: 100%;
+   flex:none;
+}
+.usernameForm{
+    position: relative;
+    bottom: 6px;
+    left: 2%;
+}
+.editForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#save{
+    margin-top: 10px;
+}
+.coverContainer{
+    height: 300px;
+    cursor: auto;
+}
+.profileCover{
+    width:100%;
+}
+.profileTopSection{
+    position: relative;
+    height: 100px;
+    bottom: 50px;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    padding: 0 10% 0 13%;
+}
+.profileButtons{
+    display: flex;
+    gap: 25px;
+    width: 250px;
+}
+#addPic{
+    border-radius: 50%;
+    width:max-content;
+    font-size: 25px;
+    font-weight: lighter;
+    padding: 0 12px;
+}
+#edit{
+    font-size: 20px;
+}
+.profilePicBig{
+    width: 18%;
+    border-radius: 50%;
+}
+.detailSection{
+    display: flex;
+    justify-content: space-between;
+}
+.profileDetail{
+    display: flex;
+    gap: 8px;
+    text-align: left;
+    flex-direction: column;
+    padding: 20px;
+    height: max-content;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    border-radius: 15px;
+}
+.profileContents{
+    padding: 0 10% 40px 10%;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+.profileContent{
+    height: 100%;
+}
+.profileName{
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+.profileNameHome{
+    font-weight: bold;
+    font-size: 20px;
+}
+.profileUser{
+    font-size: 22px;
+    color: rgb(150, 145, 145);
+}
+.profileUserHome{
+    font-size: 18px;
+    color: rgb(150, 145, 145);
+}
+.profileNumber{
+    font-weight: bold;
+}
+.profilePart{
+    color:rgb(150, 145, 145);
+}
+hr{
+    width:100%;
+}
+.following{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.userPost{
+    display: flex;
+    gap: 8px;
+}
+.bio{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color:rgb(150, 145, 145)
+}
+.bioTitle{
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(27, 26, 26);
+}
+.topData{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    width:max-content;
+}
+.uploadPic{
+    position: fixed;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width:25%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+}
+.formTitle{
+    display: flex;
+    justify-content: space-between;
+}
+.postContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    width: 300px;
+    border: 1px solid rgb(175, 172, 172);
+    border-radius: 15px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.postDescription{
+    width: 280px;
+    border: 1px solid rgb(175, 172, 172);
+    border-radius: 15px;
+    resize: none;
+    padding: 10px;
+    outline: none;
+}
+.uploadBtn{
+    width: 200px;
+    margin-bottom: 16px;
+}
+.imageIcon{
+    font-size: 80px;
+    color: rgb(175, 172, 172);
+}
+.disable-outside-clicks {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+.xMark{
+    cursor: pointer;
+}
+.postPrev{
+    flex: none;
+    height: 100%;
+}
+hr{
+    margin: 0;
+    border: solid 1px rgb(209, 202, 202);
+}
+.loggedDetail{
+    font-size: 12px;
+    color: rgb(175, 172, 172);
+}
+.addPost{
+    font-size: 16px;
+    color: rgb(27, 26, 26);
+}
+#addDescription{
+    cursor: pointer; 
+}
+.loadingGif{
+    width: 130px;
+}
+.loadingTime{
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.profilePost{
+    flex: none;
+    height: 100%;
+}
+.profilePosts{
+    display: flex;
+    gap: 20px;
+    padding-left: 10%;
+}
+.allPost{
+    display: flex;
+    flex-wrap: wrap;
+    width:fit-content;
+    gap: 20px;
+}
+.postNotification{
+    display: flex;
+    display: none;
+    position: relative;
+    gap: 40px;
+    font-size: 25px;
+    color: rgb(27, 26, 26);
+    bottom:55%;
+    height: 0;
+}
+.likes{
+    display: flex;
+    gap: 10px;
+}
+.fullPagePost{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    margin: 1% 10%;
+    padding: 40px 0;
+    gap: 10px;
+}
+.fullPageImg{
+    width:500px;
+    height: 500px;
+    justify-self: right;
+}
+.fullImg{
+    height: 100%;
+    width:100%;
+    border-radius: 15px;
+}
+.fullPostDescription{
+    padding-right: 60px;
+    display: grid;
+    grid-template-rows: auto auto auto auto 1fr;
+    align-items: center;
+    height: 500px;
+}
+.topIcon{
+    display: flex;
+    justify-content: end;
+    gap: 30px;
+    font-size: 25px;
+}
+.singlePostDescription{
+    padding: 20px 0 20px 10px;
+    justify-self: left;
+    color: rgb(150, 145, 145);
+}
+.leftSideIcon{
+    display: flex;
+    gap: 30px;
+    font-size: 22px;
+    justify-content: flex-start;
+    padding: 10px;
+}
+.likesNumber{
+    justify-self: start;
+    padding: 10px;
+}
+.writeComment{
+    padding: 10px 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+.addComment{
+    border: 0;
+    border-bottom: 1px solid rgb(209, 202, 202);
+    font-size: 16px;
+    outline: none;
+}
+.confirmComment{
+    background-color: white;
+    border: 0;
+    font-size: 22px;
+}
+.iconPost{
+    cursor: pointer;
+}
+.commentContainer{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-self: start;
+}
+.singleComment{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.commentPic{
+    height: 30px;
+    border-radius: 50%;
+}
+.commentName{
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(27, 26, 26);
+}
+.actualComment, .actualComment2{
+    font-size: 13px;
+    color: rgb(150, 145, 145);
+}
+.actualComment2{
+    padding: 15px;
+}
+.commentSection{
+    align-self: flex-start;
+    padding: 10px;
+}
+.userLiked{
+    height: 22px;
+    cursor: pointer;
+}
+.deletePost{
+    font-size: 16px;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    position: absolute;
+    top: 155px;
+    right: 220px;
+    display: none;
+    gap: 5px;
+    flex-direction: column;
+    background-color: white;
+}
+.menuBtn{
+    padding: 15px;
+    border-radius: 15px;
+    cursor:pointer
+}
+.menuBtn:hover{
+    background-color: rgb(243, 237, 237);
+}
+.Notification{
+    cursor: pointer;
+}
+.showNotification{
+    font-size: 15px;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    position: absolute;
+    top:55px;
+    right: 120px;
+    width:max-content;
+    background-color: white;
+    display: none;
+}
+.notifications{
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.notificationNumber{
+    font-size: 10px;
+    font-weight: bold;
+    color:white;
+    position: relative;
+    bottom: 29px;
+    height: 0;
+    left: 15px;
+}
+.notificationCircle{
+    padding: 2px 0;
+    background-color: rgb(231, 36, 36);
+    width:16px;
+    border-radius: 50%;
+}

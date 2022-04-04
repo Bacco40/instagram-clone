@@ -1,7 +1,7 @@
 import React,{useEffect} from "react";
 import LogIn from './LogIn';
 
-function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadForm}) {
+function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadForm, oldUser}) {
 
   function startAtTop(){
     window.scroll({
@@ -13,6 +13,9 @@ function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadFor
 
   useEffect(()=>{
     startAtTop();
+    if(data){
+      oldUser();
+    }
   },[])
 
   return (
