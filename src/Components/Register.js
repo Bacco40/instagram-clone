@@ -1,7 +1,15 @@
 import React,{useEffect} from "react";
 import logo from './logo.webp';
+import {useNavigate} from 'react-router-dom';
 
 function Register({newUser, oldUserLog}) {
+  let redirect =useNavigate();
+
+  function LogInClick(e){
+    e.preventDefault();
+    oldUserLog(e);
+    redirect('/instagram-clone');
+  }
 
   function startAtTop(){
     window.scroll({
@@ -31,7 +39,7 @@ function Register({newUser, oldUserLog}) {
                     <button id="signUp" onClick={newUser}>Sign Up With Google</button>
                     <div className="formLogIn">
                         <div className="formMessage">Already have an account?</div>
-                        <button id="logIn" onClick={oldUserLog}>Log In</button>
+                        <button id="logIn" onClick={(e) => LogInClick(e)}>Log In</button>
                     </div> 
                 </div>
             </form>

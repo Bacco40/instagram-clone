@@ -7,15 +7,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faEllipsisVertical, faXmark, faShareNodes} from '@fortawesome/free-solid-svg-icons';
 import{faHeart, faComment,faPaperPlane, faTrashCan} from '@fortawesome/free-regular-svg-icons';
+import { async } from "@firebase/util";
 library.add( faHeart, faComment,faEllipsisVertical, faPaperPlane,faXmark, faTrashCan,faShareNodes);
 
 function OpenPost({data, oldUser}) {
   const {id} = useParams();
   const docRef = doc(getFirestore(), "Posts", `${id}`);
   const [dataPost,setDataPost] = useState();
+  const [userPost,setUserPost] = useState();
   const [userLiked,setUserLiked] = useState(false);
+  const [commentData, setCommentData] = useState();
   const [notification,setNotification] =useState(0);
   const [open, setOpen] = useState(false);
+  const [idAccount, setIdAccount] = useState();
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -40,8 +44,7 @@ function OpenPost({data, oldUser}) {
     if(data && comment.value !== ""){
         await updateDoc(docRef,{
             comments: arrayUnion({
-                profilePic: data.profilePic ,
-                name: data.name,
+                id: idAccount,
                 comment: comment.value
             })
         });
@@ -63,6 +66,9 @@ function OpenPost({data, oldUser}) {
         });
         setNotification(notification+1);
         recovePostData();
+    }
+    if(!data){
+        navigate('/register');
     }
   }
 
@@ -92,6 +98,9 @@ function OpenPost({data, oldUser}) {
         setNotification(notification+1);
         recovePostData();
     }
+    if(!data){
+        navigate('/register');
+    }
   }
 
   async function userRemovedLike(e){
@@ -113,6 +122,14 @@ function OpenPost({data, oldUser}) {
             setUserLiked(true);
         }
     }
+  }
+
+  async function checkAccountMaster(){
+    const userAccount = query(collection(getFirestore(), 'Accounts'), where("mail", "==", data.mail ));
+    const querySnapshot2 = await getDocs(userAccount);
+    querySnapshot2.forEach((doc) => {
+      setIdAccount(doc.id);
+    });
   }
 
   async function recovePostData(){
@@ -173,6 +190,26 @@ async function deletePost(){
     });
 }
 
+async function recoveUserPost(){
+    let accountRef = query(collection(getFirestore(), 'Accounts'), where("mail", "==", dataPost.mail ));
+    const querySnapshot = await getDocs(accountRef);
+    querySnapshot.forEach((doc) => {
+        setUserPost(doc.data());
+    });
+}
+
+async function recoveCommenterData(){
+    let arrayAccounts =[];
+    let arrayAndComment =[];
+    for(let i=0;i<dataPost.comments.length;i++){
+        const accountDocRef = doc(getFirestore(), "Accounts", `${dataPost.comments[i].id}`);
+        const docSnap = await getDoc(accountDocRef);
+        arrayAccounts[0]=docSnap.data();
+        arrayAndComment[i] =arrayAccounts.concat(dataPost.comments[i]);
+    }
+    setCommentData(arrayAndComment);
+}
+
 useEffect(()=>{
     if(data) {
         oldUser();
@@ -186,13 +223,16 @@ useEffect(()=>{
 
   useEffect(()=>{
     if(data && dataPost){
+        recoveUserPost();
         currentUserLiked(); 
+        checkAccountMaster();
+        recoveCommenterData();
     }
-  },[dataPost])
+  },[data,dataPost])
 
   return (
     <div className="singlePostPage" >
-        {dataPost &&
+        {dataPost && userPost &&
             <div className="fullPagePost">
                 <div className="fullPageImg">
                     <img className="fullImg"src={dataPost.picture} alt={dataPost.description}/>
@@ -211,21 +251,21 @@ useEffect(()=>{
                         <FontAwesomeIcon className="iconPost" icon="fa-solid fa-xmark" onClick={() => navigate(-1)}/>
                     </div>
                     <div className="topData">
-                    <img className="homeProfilePic" src={dataPost.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
+                    <img className="homeProfilePic" src={userPost.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
                     <div className="profileData">
-                        <div className="profileNameHome">{dataPost.name}</div>
+                        <div className="profileNameHome">{userPost.name}</div>
                         <div className="profileUserHome">@{dataPost.username}</div>
                     </div>
                     </div>
                     <div className="singlePostDescription">{dataPost.description}</div><hr/>
                     <div className="commentSection">
-                        {dataPost.comments && dataPost.comments !== undefined && 
+                        {dataPost.comments && commentData !== undefined && 
                             <div className="commentContainer">
-                            {dataPost.comments.map((comment, index) => (
+                            {commentData.map((comment, index) => (
                                 <div className="singleComment" key={index}>
-                                    <img src={comment.profilePic} className="commentPic" alt="profile pic"/>
-                                    <div className="commentName">{comment.name}:</div>
-                                    <div className="actualComment">{comment.comment}</div>
+                                    <img src={comment[0].profilePic} className="commentPic" alt="profile pic"/>
+                                    <div className="commentName">{comment[0].name}:</div>
+                                    <div className="actualComment">{comment[1].comment}</div>
                                 </div>
                             ))}
                             </div>

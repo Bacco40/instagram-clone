@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from "react";
-import { useLocation } from 'react-router-dom';
 import NewPost from './NewPost';
+import Followers from './Followers';
+import {Link} from 'react-router-dom';
 import UserPost from './UserPost';
 import loadingGif from './loading.gif';
 import {
@@ -12,6 +13,10 @@ import {
   collection,
   query,
   getDocs,
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
   where
 } from 'firebase/firestore';
 
@@ -19,6 +24,7 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
   const [dataProfile, setDataProfile] = useState();
   const [loading, setLoading] = useState(true);
   const [postsData,setPostsData] = useState();
+  const [openFollowing,setOpenFollowing] = useState(true);
 
   function startAtTop(){
     window.scroll({
@@ -83,6 +89,66 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
     setPostsData(array);
   }
 
+  function openFollow(e){
+    if(e.target.attributes.value.value === "following"){
+      setOpenFollowing(true)
+    }else{
+      setOpenFollowing(false)
+    }
+    document.querySelector('.disable-outside-clicks2').style.cssText='display:flex;';
+  }
+
+  function closeFollow(){
+    document.querySelector('.disable-outside-clicks2').style.cssText='display:none;';
+  }
+
+  async function addFollow(e,accountId){
+    e.preventDefault();
+    let userRef= null;
+    const userData = query(collection(getFirestore(), 'Accounts'), where("username", "==", e.target.id ));
+    const querySnapshot = await getDocs(userData);
+    querySnapshot.forEach((doc) => {
+      userRef= doc.id;
+    });
+    const documentRef = doc(getFirestore(), "Accounts", `${userRef}`);
+    await updateDoc(documentRef,{
+      followers: arrayUnion({
+        id:accountId
+      })
+    });
+    const documentRef2 = doc(getFirestore(), "Accounts", `${accountId}`);
+    await updateDoc(documentRef2,{
+      following: arrayUnion({
+        id:userRef
+      })
+    });
+    initialFirebaseAuth();
+  }
+
+  async function removeFollow(e, accountId){
+    e.preventDefault();
+    let userRef= null;
+    const userData = query(collection(getFirestore(), 'Accounts'), where("username", "==", e.target.id ));
+    const querySnapshot = await getDocs(userData);
+    querySnapshot.forEach((doc) => {
+      userRef= doc.id;
+    });
+    const documentRef = doc(getFirestore(), "Accounts", `${userRef}`);
+    await updateDoc(documentRef,{
+      followers: arrayRemove({
+        id:accountId
+      })
+    });
+    const documentRef2 = doc(getFirestore(), "Accounts", `${accountId}`);
+    await updateDoc(documentRef2,{
+      following: arrayRemove({
+        id:userRef
+      })
+    });
+    initialFirebaseAuth();
+  }
+
+
   useEffect(()=>{
     startAtTop();
     if(data){
@@ -104,7 +170,9 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
           <div className="profileTopSection">
             <img className="profilePicBig" src={dataProfile.profilePic} alt="profile pic" referrerPolicy="no-referrer"/> 
             <div className="profileButtons">
-              <button id="edit">Edit Profile</button>
+              <Link className='editLink' to='/editProfile'>
+                <button id="edit">Edit Profile</button>
+              </Link>
               <button id="addPic" onClick={openUploadForm}> + </button>
             </div>
           </div>
@@ -114,16 +182,16 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
               <div className="profileUser">@{dataProfile.username}</div>
               <div className="userPost">
                 <div className="profileNumber">{postsData && postsData.length}</div>
-                <div className="profilePart">  Posts</div>
+                <div className="profilePart2">  Posts</div>
               </div><hr/>
               <div className="detailSection">
-                <div className="following">
-                  <div className="profileNumber">{dataProfile.following.length}</div>
-                  <div className="profilePart"> Following </div>
+                <div className="following" value="following"  onClick={(e)=>openFollow(e)}>
+                  <div className="profileNumber" value="following">{dataProfile.following.length}</div>
+                  <div className="profilePart" value="following"> Following </div>
                 </div>
-                <div className="following">
-                  <div className="profileNumber">{dataProfile.followers.length}</div>
-                  <div className="profilePart"> Followers </div>
+                <div className="following" value="followers" onClick={(e)=>openFollow(e)}>
+                  <div className="profileNumber" value="followers">{dataProfile.followers.length}</div>
+                  <div className="profilePart" value="followers"> Followers </div>
                 </div>
               </div>
               <hr/>
@@ -143,6 +211,14 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
             </div>
           </div>
           <NewPost closeUploadForm={closeUploadForm} data={dataProfile} profilePosts={(e) => profilePosts(e)}/>
+          <Followers 
+            closeFollow={closeFollow} 
+            data={dataProfile}
+            openFollowing={openFollowing} 
+            setOpenFollowing={setOpenFollowing}
+            addFollow={addFollow}
+            removeFollow={removeFollow}
+          />
         </div>
       }
       {loading === true &&

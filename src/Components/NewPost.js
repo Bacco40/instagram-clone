@@ -1,5 +1,5 @@
 import React,{useRef, useState} from "react";
-import loadingGif from './loading.gif'
+import loadingGif from './loading.gif';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faXmark} from '@fortawesome/free-solid-svg-icons';
@@ -105,7 +105,7 @@ function NewPost({closeUploadForm, data, profilePosts}) {
   return (
     <div className="disable-outside-clicks">
         <form className="uploadPic">
-            <div className="formTitle">
+            <div id="formTop">
                 <div className="profileUserHome">Create New Post</div>
                 <div className="profileUserHome" ><FontAwesomeIcon icon="fa-solid fa-xmark" className="xMark" onClick={closeForm}/></div>
             </div><hr/>

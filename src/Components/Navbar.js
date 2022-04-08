@@ -37,12 +37,14 @@ function NavbarStart({pageSelected, data, oldUser}) {
 
   async function showNotification(e){
     pageSelected(e);
-    if(open === false ){
-      setOpen(true);
-      removeNotifications();
-      setNumNotifications(0);
-    }else{
-      setOpen(false);
+    if(data){
+      if(open === false ){
+        setOpen(true);
+        removeNotifications();
+        setNumNotifications(0);
+      }else{
+        setOpen(false);
+      }
     }
   }
 
@@ -104,7 +106,7 @@ function NavbarStart({pageSelected, data, oldUser}) {
             </Link>
             <li className='list'ref={wrapperRef} >
               <FontAwesomeIcon className='Notification' id="Notification" icon="fa-solid fa-heart"  onClick={showNotification}/>
-              {data && numNotifications > 0 &&
+              {data  && numNotifications > 0 &&
                 <div className="notificationNumber"><div className="notificationCircle">{data.Notifications.length}</div></div>
               }
               <div className="showNotification" >

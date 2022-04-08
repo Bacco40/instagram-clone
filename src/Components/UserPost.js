@@ -35,7 +35,7 @@ function UserPost({post}) {
 
   return (
     <div className="postContainer">
-        <Link className="profilePost" to={`/profile/${post[10]}`}>
+        <Link className="profilePost" to={`/instagram-clone/${post[10]}`}>
           <img className="profilePost" src={post[1]} alt="user post" onMouseEnter={(e) => imgEffect(e)} onMouseLeave={(e) => imgEffect2(e) }/>
         </Link>
         <div className="postNotification" name={post[1]}>
