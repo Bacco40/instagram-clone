@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from "react";
 import NewPost from './NewPost';
 import Followers from './Followers';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import UserPost from './UserPost';
 import loadingGif from './loading.gif';
 import {
@@ -25,6 +25,7 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
   const [loading, setLoading] = useState(true);
   const [postsData,setPostsData] = useState();
   const [openFollowing,setOpenFollowing] = useState(true);
+  let redirect=useNavigate();
 
   function startAtTop(){
     window.scroll({
@@ -44,6 +45,7 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
       getUserDataProfile(userMail);
     }else{
       setLogged(false);
+      redirect('/register');
     }
   }
 

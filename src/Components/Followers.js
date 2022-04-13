@@ -119,11 +119,11 @@ function Followers({closeFollow, data, openFollowing, setOpenFollowing,addFollow
                   </div>
                 </div>
                 {account.followers.map((followers,index) => (
-                  <>
+                  <React.Fragment key={index}>
                     {followers.id === accountId &&
                       <button className="Follow" key={index} id={account.username} onClick={(e) => removeFollow(e,accountId)}>Unfollow</button>
                     }
-                  </>
+                  </React.Fragment>
                 ))}
                 <Following accountUsername={account.username} addFollow={addFollow} accountId={accountId} userMail={userMail}/>
               </Link>

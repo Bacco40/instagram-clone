@@ -3,7 +3,7 @@ import { useParams, useNavigate} from 'react-router-dom';
 import Followers from './Followers';
 import {Link} from 'react-router-dom';
 import UserPost from './UserPost';
-import loadingGif from './loading.gif';
+import loadingGif from './loading2.gif';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -29,8 +29,9 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
   const {username} = useParams();
   const [userData, setUserData] = useState();
   const [postsData,setPostsData] = useState();
-  const [userFollowed,setUserFollowed] = useState("Follow");
+  const [userFollowed,setUserFollowed] = useState();
   const [idAccount,setIdAccount] = useState();
+  const [loading,setLoading] = useState(true);
   let redirect =useNavigate();
 
   function startAtTop(){
@@ -101,18 +102,27 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
     }
     if(userFollowed === "Follow" && data){
       addFollow(e,idAccount);
+      setLoading(true);
+      recoveUserData();
     }
     if(userFollowed === "Unfollow" && data){
       removeFollow(e,idAccount);
+      setLoading(true);
+      recoveUserData();
     }
-    recoveUserData();
   }
 
   useEffect(()=>{
-    if(userData){
+    if(userFollowed){
+      setLoading(false);
+    }
+  },[userFollowed])
+
+  useEffect(()=>{
+    if(userData && idAccount !== undefined){
       checkUserFollowed();
     }
-  },[userData])
+  },[userData,idAccount])
 
   useEffect(()=>{
     if(userData && data !== undefined){
@@ -128,7 +138,9 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
   useEffect(()=>{
     if(data){
       recoveUserData();
-    }
+    }else(
+      setUserFollowed("Follow")
+    )
   },[data])
 
   useEffect(()=>{
@@ -149,7 +161,7 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
             <div className="profileTopSection">
               <img className="profilePicBig" src={userData.profilePic} alt="profile pic" referrerPolicy="no-referrer"/> 
               <div className="profileButtons">
-                <button className="followNewProfile" id={userData.username} onClick={(e) => clickFollow(e)}>{userFollowed}</button>
+                <button className="followNewProfile" id={userData.username} onClick={(e) => clickFollow(e)}>{loading === true ? <img src={loadingGif} className="loadingGif2" alt="loading..."/> : userFollowed}</button>
                 <button id="newMessage" > <FontAwesomeIcon icon="fa-regular fa-comment" /> </button>
               </div>
             </div>

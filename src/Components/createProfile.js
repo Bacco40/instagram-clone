@@ -1,4 +1,5 @@
 import React,{useEffect, useRef, useState} from "react";
+import{useNavigate}from "react-router-dom";
 import background from './background.jpg';
 import profilePic from './profile.jpeg';
 import loadingGif from './loading.gif';
@@ -39,6 +40,7 @@ function CreateProfile({username, getUserData, setNewUserLog}) {
   const [type, setType] = useState(0);
   const [type2, setType2] = useState(0);
   const [loading,setLoading] = useState(false);
+  const navigate = useNavigate();
 
   function startAtTop(){
     window.scroll({
@@ -68,69 +70,87 @@ function CreateProfile({username, getUserData, setNewUserLog}) {
 
   async function saveUserDetail(e){
     e.preventDefault();
-    setLoading(true);
-    setNewUserLog(true);
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(getAuth(), provider);
-    const userMail = getAuth().currentUser.email;
-    const userAlreadyExist = query(collection(getFirestore(), 'Accounts'), where("mail", "==", userMail ));
-    const querySnapshot = await getDocs(userAlreadyExist);
-    let length=0;
-    querySnapshot.forEach((doc) => {
-      length+=1;
-    })
-    if(length === 0){
-      const name = document.querySelector('#displayName'); 
-      const bio = document.querySelector('#bio');
-      try {
-        const accountRef = await addDoc(collection(getFirestore(), 'Accounts'), {
-          username: username,
-          mail: getAuth().currentUser.email,
-          name: name.value,
-          bio: bio.value,
-          profilePic: profilePic,
-          coverPic: "https://firebasestorage.googleapis.com/v0/b/instagram-clone-9b54b.appspot.com/o/SSJGEQIJqzVJfJ3cGaPFynJfo9z1%2Fdefault_background%2Fbackground.jpg?alt=media&token=287b4062-4cc5-4da5-ae29-576aaf6ba61c",
-          followers: [],
-          following:[{id:"aHNNPx20S4uDYTpWxqMu"}],
-          posts:[],
-          Notifications:[]
-        });
-        const docRef = doc(getFirestore(), "Accounts", `aHNNPx20S4uDYTpWxqMu`);
-        await updateDoc(docRef,{
-          followers: arrayUnion({
-              id: accountRef.id
-          })
-        });
-        if(type === 1){
-          const filePath = `${getAuth().currentUser.uid}/${accountRef.id}/${fileBack.name}`;
-          const newImageRef = ref(getStorage(), filePath);
-          const fileSnapshot = await uploadBytesResumable(newImageRef, fileBack);
-          const publicImageUrl = await getDownloadURL(newImageRef);
-          await updateDoc(accountRef,{
-            coverPic: publicImageUrl,
-            storageBackUri: fileSnapshot.metadata.fullPath
+    const name = document.querySelector('#displayName'); 
+    const bio = document.querySelector('#bio');
+    if(username && name.value.length>3 && name.value.length<20){
+        setLoading(true);
+      setNewUserLog(true);
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(getAuth(), provider);
+      const userMail = getAuth().currentUser.email;
+      const userAlreadyExist = query(collection(getFirestore(), 'Accounts'), where("mail", "==", userMail ));
+      const querySnapshot = await getDocs(userAlreadyExist);
+      let length=0;
+      querySnapshot.forEach((doc) => {
+        length+=1;
+      })
+      if(length === 0){
+        try {
+          const accountRef = await addDoc(collection(getFirestore(), 'Accounts'), {
+            username: username,
+            mail: getAuth().currentUser.email,
+            name: name.value,
+            bio: bio.value,
+            profilePic: profilePic,
+            coverPic: "https://firebasestorage.googleapis.com/v0/b/instagram-clone-9b54b.appspot.com/o/SSJGEQIJqzVJfJ3cGaPFynJfo9z1%2Fdefault_background%2Fbackground.jpg?alt=media&token=287b4062-4cc5-4da5-ae29-576aaf6ba61c",
+            followers: [],
+            following:[{id:"aHNNPx20S4uDYTpWxqMu"}],
+            posts:[],
+            Notifications:[]
           });
-        }
-        if(type2 === 2){
-          const filePath = `${getAuth().currentUser.uid}/${accountRef.id}/${filePic.name}`;
-          const newImageRef = ref(getStorage(), filePath);
-          const fileSnapshot = await uploadBytesResumable(newImageRef, filePic);
-          const publicImageUrl = await getDownloadURL(newImageRef);
-          await updateDoc(accountRef,{
-            profilePic: publicImageUrl,
-            storagePicUri: fileSnapshot.metadata.fullPath
+          const docRef = doc(getFirestore(), "Accounts", `aHNNPx20S4uDYTpWxqMu`);
+          await updateDoc(docRef,{
+            followers: arrayUnion({
+                id: accountRef.id
+            })
           });
+          if(type === 1){
+            const filePath = `${getAuth().currentUser.uid}/${accountRef.id}/${fileBack.name}`;
+            const newImageRef = ref(getStorage(), filePath);
+            const fileSnapshot = await uploadBytesResumable(newImageRef, fileBack);
+            const publicImageUrl = await getDownloadURL(newImageRef);
+            await updateDoc(accountRef,{
+              coverPic: publicImageUrl,
+              storageBackUri: fileSnapshot.metadata.fullPath
+            });
+          }
+          if(type2 === 2){
+            const filePath = `${getAuth().currentUser.uid}/${accountRef.id}/${filePic.name}`;
+            const newImageRef = ref(getStorage(), filePath);
+            const fileSnapshot = await uploadBytesResumable(newImageRef, filePic);
+            const publicImageUrl = await getDownloadURL(newImageRef);
+            await updateDoc(accountRef,{
+              profilePic: publicImageUrl,
+              storagePicUri: fileSnapshot.metadata.fullPath
+            });
+          }
+          setNewUserLog(false);
+          getUserData(userMail, 'profile');
         }
-        setNewUserLog(false);
-        getUserData(userMail, 'profile');
+        catch(error) {
+          console.error('Error uploading the account to Firebase Database', error);
+        }
       }
-      catch(error) {
-        console.error('Error uploading the account to Firebase Database', error);
+      else{
+        if(length!==0){
+          setNewUserLog(false);
+          getUserData(userMail, 'profile');
+        }
       }
     }
     else{
-      setNewUserLog(false);
-      getUserData(userMail, 'profile');
+      const error = document.querySelector('.formError');
+      if(name.value.length<3){
+        error.innerHTML = 'Username must be at least 3 character!';
+        error.style.cssText = 'color:red;';
+      }
+      if(name.value.length>20){
+        error.innerHTML = 'Username must be maximum 20 character!';
+        error.style.cssText = 'color:red;';
+      }
+      if(username=== undefined){
+          navigate('/register');
+        }
     }
   }
 
@@ -191,7 +211,6 @@ function CreateProfile({username, getUserData, setNewUserLog}) {
                 {loading === false &&
                   <div className="buttons">
                       <button id="save" onClick={(e)=>saveUserDetail(e)}>Save</button>
-                      <button id="preview">Preview Profile</button>
                   </div>
                 }
             </form>

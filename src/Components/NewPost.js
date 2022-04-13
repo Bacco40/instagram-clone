@@ -26,7 +26,7 @@ import {getAuth} from 'firebase/auth';
   library.add(faImage, faXmark);
 
 
-function NewPost({closeUploadForm, data, profilePosts}) {
+function NewPost({closeUploadForm, data, profilePosts,recovePost}) {
   const post = useRef(null)
   const [postUrl,setPostUrl] = useState();
   const [postFile, setPostFile] = useState();
@@ -78,6 +78,7 @@ function NewPost({closeUploadForm, data, profilePosts}) {
         setLoading(false);
         closeForm();
         profilePosts();
+        recovePost();
     }
   }
 

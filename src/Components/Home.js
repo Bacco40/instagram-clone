@@ -1,5 +1,6 @@
 import React,{useEffect,useState} from "react";
 import LogIn from './LogIn';
+import HomePost from './HomePost';
 import { doc, getDoc,getFirestore} from "firebase/firestore";
 
 function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadForm, oldUser,
@@ -41,6 +42,7 @@ function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadFor
       const docSnapshot = await getDoc(postRef);
       arrayPosts[d]=docSnapshot.data();
     }
+    arrayPosts.sort((a,b) => b.date - a.date); 
     setPostsData(arrayPosts);
   }
 
@@ -64,7 +66,7 @@ function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadFor
           {postsdata &&
             <>
             {postsdata.map((post,index) =>(
-              <></>
+              <HomePost key={index} post={post} data={data} oldUser={oldUser}/>
             ))}
             </>
           }
@@ -72,6 +74,7 @@ function Home({oldUserLog,logged,data, signOutUser,openUploadForm,closeUploadFor
         <div className="logIn">
             <LogIn 
               oldUserLog={oldUserLog} 
+              recovePost={recovePost}
               logged={logged} 
               data={data} 
               signOutUser={signOutUser}

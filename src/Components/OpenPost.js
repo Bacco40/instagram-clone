@@ -1,5 +1,5 @@
 import React,{useEffect, useState, useRef} from "react";
-import{useNavigate}from "react-router-dom";
+import{useNavigate, Link}from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import heartSolid from './heart-solid.jpg';
 import { doc, getDoc, updateDoc,deleteDoc, getFirestore, arrayUnion, arrayRemove,query,collection,getDocs,where,Timestamp} from "firebase/firestore";
@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faEllipsisVertical, faXmark, faShareNodes} from '@fortawesome/free-solid-svg-icons';
 import{faHeart, faComment,faPaperPlane, faTrashCan} from '@fortawesome/free-regular-svg-icons';
-import { async } from "@firebase/util";
 library.add( faHeart, faComment,faEllipsisVertical, faPaperPlane,faXmark, faTrashCan,faShareNodes);
 
 function OpenPost({data, oldUser}) {
@@ -58,9 +57,9 @@ function OpenPost({data, oldUser}) {
         accountRef=doc(getFirestore(), "Accounts", `${reference}`);
         await updateDoc(accountRef,{
             Notifications: arrayUnion({
-                profilePic: data.profilePic,
-                name: data.name,
+                id: idAccount,
                 action: "commented" ,
+                post: id,
                 time: Timestamp.now()
             })
         });
@@ -89,9 +88,9 @@ function OpenPost({data, oldUser}) {
         accountRef=doc(getFirestore(), "Accounts", `${reference}`);
         await updateDoc(accountRef,{
             Notifications: arrayUnion({
-                profilePic: data.profilePic,
-                name: data.name,
+                id: idAccount,
                 action: "liked",
+                post: id,
                 time: Timestamp.now()
             })
         });
@@ -250,23 +249,23 @@ useEffect(()=>{
                         </div>
                         <FontAwesomeIcon className="iconPost" icon="fa-solid fa-xmark" onClick={() => navigate(-1)}/>
                     </div>
-                    <div className="topData">
-                    <img className="homeProfilePic" src={userPost.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
-                    <div className="profileData">
-                        <div className="profileNameHome">{userPost.name}</div>
-                        <div className="profileUserHome">@{dataPost.username}</div>
-                    </div>
-                    </div>
+                    <Link className="topData" to={`/profile/${userPost.username}`}>
+                        <img className="homeProfilePic" src={userPost.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
+                        <div className="profileData">
+                            <div className="profileNameHome">{userPost.name}</div>
+                            <div className="profileUserHome">@{dataPost.username}</div>
+                        </div>
+                    </Link>
                     <div className="singlePostDescription">{dataPost.description}</div><hr/>
                     <div className="commentSection">
                         {dataPost.comments && commentData !== undefined && 
                             <div className="commentContainer">
                             {commentData.map((comment, index) => (
-                                <div className="singleComment" key={index}>
+                                <Link className="singleComment" key={index} to={`/profile/${comment[0].username}`}>
                                     <img src={comment[0].profilePic} className="commentPic" alt="profile pic"/>
                                     <div className="commentName">{comment[0].name}:</div>
                                     <div className="actualComment">{comment[1].comment}</div>
-                                </div>
+                                </Link>
                             ))}
                             </div>
                         }

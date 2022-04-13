@@ -32,7 +32,7 @@ function Register({newUser, oldUserLog}) {
                     <div className="titleForm">Sign Up</div>
                 </div>
                 <div className="searchBox">
-                    <input type="text" className="search" id="username" minLength="3" placeholder="@ Username"/> 
+                    <input type="text" className="search" id="username" placeholder="@ Username"/> 
                     <div className="formError">Name must be 3-15 characters.</div>
                 </div>
                 <div className="buttons">

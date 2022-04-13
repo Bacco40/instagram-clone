@@ -7,7 +7,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import{faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 library.add(faCirclePlus);
 
-function LogIn({oldUserLog,logged, data, signOutUser, openUploadForm, closeUploadForm,
+function LogIn({oldUserLog,recovePost,logged, data, signOutUser, openUploadForm, closeUploadForm,
   closeFollow,openFollowing,setOpenFollowing,addFollow,removeFollow,openFollow}) {
 
   return (
@@ -23,19 +23,19 @@ function LogIn({oldUserLog,logged, data, signOutUser, openUploadForm, closeUploa
       {logged === true && data &&
         <div className="logIn">
           <div className="profileDetail">
-            <div className="topData">
+            <Link className="topData" to='/profile'>
               <img className="homeProfilePic" src={data.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
               <div className="profileData">
                 <div className="profileNameHome">{data.name}</div>
                 <div className="profileUserHome">@{data.username}</div>
               </div>
-            </div>
+            </Link>
             <hr/>
             <div className="detailSection">
-              <div className="following">
+              <Link className="following" to='/profile'>
                 <div className="profileNumber">{data.posts.length}</div>
                 <div className="loggedDetail">  Posts</div>
-              </div>
+              </Link>
               <div className="following" value="following" onClick={(e)=>openFollow(e)}>
                 <div className="profileNumber" value="following">{data.following.length}</div>
                 <div className="loggedDetail" value="following"> Following </div>
@@ -53,7 +53,7 @@ function LogIn({oldUserLog,logged, data, signOutUser, openUploadForm, closeUploa
           <button id="signUp" onClick={signOutUser}>Log Out</button>
       </div>
       }  
-      <NewPost closeUploadForm={closeUploadForm} data={data}/>
+      <NewPost closeUploadForm={closeUploadForm} data={data} recovePost={recovePost}/>
       <Followers 
           closeFollow={closeFollow} 
           data={data} 
