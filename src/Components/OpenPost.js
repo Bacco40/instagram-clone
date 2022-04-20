@@ -227,6 +227,10 @@ useEffect(()=>{
         checkAccountMaster();
         recoveCommenterData();
     }
+    if(dataPost){
+        recoveUserPost();
+        recoveCommenterData();
+    }
   },[data,dataPost])
 
   return (
