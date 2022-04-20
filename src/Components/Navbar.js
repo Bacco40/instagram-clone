@@ -230,7 +230,7 @@ function NavbarStart({pageSelected, data, oldUser,signOutUser}) {
             <Link className='Home' to='/instagram-clone'>
                 <li className='list'> <FontAwesomeIcon className='Home' id="Home" icon="fa-solid fa-house" onClick={pageSelected}/></li>
             </Link>
-            <Link className='Direct' to='/direct' >
+            <Link className='Direct'  to= {data ?'/direct' : '/register'}>
                 <li className='list'><FontAwesomeIcon className='Direct' id="Direct" icon="fa-solid fa-comment" onClick={pageSelected}/></li>
             </Link>
             <li className='list'ref={wrapperRef} >

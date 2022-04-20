@@ -8,6 +8,9 @@ html, body, #root{
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+a{
+    color: inherit;
+}
 #root::-webkit-scrollbar {
     display: none;
 }
@@ -15,11 +18,14 @@ html, body, #root{
     height: 100%;
 }
 .homeNav{
+    position:fixed;
     display: flex;
     justify-content: space-around;
     align-items: center;
     box-shadow: 0px 3px 2px rgb(175, 172, 172);
     width: 100%;
+    z-index: 4;
+    background-color: white;
 }
 .Title, .formTitle, .formDesc{
     display: flex;
@@ -49,6 +55,7 @@ li{
     border-radius: 10px;
     border: 1px solid rgb(209, 202, 202) ;
     color: rgb(150, 145, 145);
+    outline: none;
 }
 
 label[for="search"]{
@@ -64,13 +71,17 @@ label[for="search"]{
     display: grid;
     grid-template-columns: 3fr 1fr;
     height: 100%;
+    margin-top: 70px;
 }
 .logIn{
+    position: sticky;
+    top: 100px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    z-index: 3;
 }
-#signUp,#logIn,#save,#preview, #addPic, #edit, .uploadBtn{
+#signUp,#logIn,#save,#preview, #addPic, #edit, .uploadBtn,.Unfollow,.Follow,#newMessage, .followNewProfile{
     font-size: 16px;
     font-weight: bold;
     border: 0;
@@ -79,11 +90,18 @@ label[for="search"]{
     cursor: pointer;
     width: 100%;
 }
+.editLink{
+    width: 100%; 
+}
 #signUp,#save, .uploadBtn{
     color: white;
     background-color: rgb(27, 26, 26);
 }
-#logIn,#preview, #addPic, #edit{
+.Unfollow, .Follow{
+    padding: 5px 15px;
+    width: max-content;
+}
+#logIn,#preview, #addPic, #edit,.Unfollow,.Follow,#newMessage, .followNewProfile{
     background-color: white;
     -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
     box-shadow: 0 0 6px rgb(175, 172, 172);
@@ -93,6 +111,7 @@ label[for="search"]{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 80px;
 }
 .registrationForm{
     -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
@@ -165,6 +184,7 @@ label[for="search"]{
 .backgroundForm, .coverContainer{
     display: flex;
     justify-content: center;
+    flex-direction: column;
     width: 100%; 
     height: 140px;
     cursor: pointer;
@@ -172,7 +192,7 @@ label[for="search"]{
 }
 #backgroundForm{
     flex:none;
-    width: 100%; 
+    height: 100%; 
 }
 .createUserForm{
     -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
@@ -194,6 +214,7 @@ label[for="search"]{
     border-radius: 50%;
     cursor: pointer;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -220,7 +241,7 @@ label[for="search"]{
     cursor: auto;
 }
 .profileCover{
-    width:100%;
+    height:100%;
 }
 .profileTopSection{
     position: relative;
@@ -243,7 +264,13 @@ label[for="search"]{
     font-weight: lighter;
     padding: 0 12px;
 }
-#edit{
+#newMessage{
+    border-radius: 50%;
+    width:max-content;
+    font-size: 22px;
+    padding: 0 8px;
+}
+#edit, .followNewProfile{
     font-size: 20px;
 }
 .profilePicBig{
@@ -253,6 +280,8 @@ label[for="search"]{
 .detailSection{
     display: flex;
     justify-content: space-between;
+    gap: 10px;
+    width:max-content;
 }
 .profileDetail{
     display: flex;
@@ -273,6 +302,7 @@ label[for="search"]{
 }
 .profileContent{
     height: 100%;
+    margin-top: 70px;
 }
 .profileName{
     padding-top: 10px;
@@ -294,8 +324,9 @@ label[for="search"]{
 .profileNumber{
     font-weight: bold;
 }
-.profilePart{
+.profilePart, .profilePart2{
     color:rgb(150, 145, 145);
+    font-weight: bold;
 }
 hr{
     width:100%;
@@ -304,6 +335,7 @@ hr{
     display: flex;
     flex-direction: column;
     gap: 8px;
+    cursor: pointer;
 }
 .userPost{
     display: flex;
@@ -343,9 +375,14 @@ hr{
     -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
     box-shadow: 0 0 6px rgb(175, 172, 172);
 }
-.formTitle{
+#formTop{
     display: flex;
     justify-content: space-between;
+    width:100%;
+}
+#formTopEdit{
+    width:100%;
+    text-align: end;
 }
 .postContainer{
     display: flex;
@@ -375,7 +412,7 @@ hr{
     font-size: 80px;
     color: rgb(175, 172, 172);
 }
-.disable-outside-clicks {
+.disable-outside-clicks, .disable-outside-clicks2 {
     display: none;
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -383,7 +420,11 @@ hr{
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 4;
   }
+.disable-outside-clicks2{
+    justify-content: center;
+}
 .xMark{
     cursor: pointer;
 }
@@ -408,6 +449,17 @@ hr{
 }
 .loadingGif{
     width: 130px;
+}
+.loadingGif2{
+    height: 20px;
+}
+.loadingGif3{
+    height: 60px;
+    width: 60px;
+    align-self: center;
+}
+.loadingGifCreate{
+    height: 40px;
 }
 .loadingTime{
     display: flex;
@@ -440,6 +492,16 @@ hr{
     bottom:55%;
     height: 0;
 }
+.updateImg{
+    display: none;
+    position: relative;
+    align-self: center;
+    font-size: 25px;
+    color: rgb(27, 26, 26);
+    bottom:55%;
+    height: 0;
+    text-align: center;
+}
 .likes{
     display: flex;
     gap: 10px;
@@ -452,16 +514,34 @@ hr{
     box-shadow: 0 0 6px rgb(175, 172, 172);
     margin: 1% 10%;
     padding: 40px 0;
+    margin-top: 85px;
     gap: 10px;
 }
 .fullPageImg{
     width:500px;
-    height: 500px;
+    position: relative;
     justify-self: right;
 }
+.fullPageImg:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+.fullPageImg:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
 .fullImg{
+    position: absolute; 
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; 
+    width: 100%; 
     height: 100%;
-    width:100%;
+    object-fit: cover; 
+    object-position: center;
     border-radius: 15px;
 }
 .fullPostDescription{
@@ -482,6 +562,9 @@ hr{
     justify-self: left;
     color: rgb(150, 145, 145);
 }
+.noResults{
+    color: rgb(150, 145, 145);
+}
 .leftSideIcon{
     display: flex;
     gap: 30px;
@@ -492,16 +575,33 @@ hr{
 .likesNumber{
     justify-self: start;
     padding: 10px;
+    font-weight: bold;
+    text-align:start ;
 }
-.writeComment{
+.likesNumber2{
+    justify-self: start;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align:start ;
+}
+.writeComment, .writeComment2{
     padding: 10px 0;
     display: grid;
     grid-template-columns: 1fr auto;
+}
+.writeComment2{
+    padding: 0 10px 10px 10px;
 }
 .addComment{
     border: 0;
     border-bottom: 1px solid rgb(209, 202, 202);
     font-size: 16px;
+    outline: none;
+}
+.addCommentHome{
+    border: 0;
+    border-top: 1px solid rgb(209, 202, 202);
+    font-size: 14px;
     outline: none;
 }
 .confirmComment{
@@ -527,17 +627,28 @@ hr{
     height: 30px;
     border-radius: 50%;
 }
-.commentName{
+.commentName, .profileNamePost{
     font-size: 14px;
     font-weight: bold;
     color: rgb(27, 26, 26);
 }
-.actualComment, .actualComment2{
+.actualComment, .actualComment2, .profileUserPost{
+    font-size: 13px;
+    color: rgb(27, 26, 26);
+}
+.commentNumber, .commentNumber2{
+    text-align: start;
     font-size: 13px;
     color: rgb(150, 145, 145);
+    padding-left: 10px;
+}
+.commentNumber2{
+    display: flex;
+    gap: 5px;
 }
 .actualComment2{
     padding: 15px;
+    cursor: pointer;
 }
 .commentSection{
     align-self: flex-start;
@@ -560,6 +671,24 @@ hr{
     flex-direction: column;
     background-color: white;
 }
+.deletePost2{
+    font-size: 16px;    
+    position: relative;
+    display: none;
+    gap: 5px;
+    flex-direction: column;
+    background-color: white;
+    z-index: 1;
+}
+.deletePost3{
+    position: absolute;
+    right:10px;
+    width: max-content;
+    background-color: white;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+}
 .menuBtn{
     padding: 15px;
     border-radius: 15px;
@@ -578,10 +707,38 @@ hr{
     box-shadow: 0 0 6px rgb(175, 172, 172);
     position: absolute;
     top:55px;
-    right: 120px;
+    right: 12%;
     width:max-content;
     background-color: white;
     display: none;
+    z-index: 4;
+}
+.showProfile{
+    font-size: 15px;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    position: absolute;
+    top:55px;
+    right: 9%;
+    width:max-content;
+    background-color: white;
+    display: none;
+    z-index: 4;
+}
+#Profile{
+    cursor: pointer;
+}
+.showSearch{
+    font-size: 15px;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    width:20%;
+    position: absolute;
+    top:55px;
+    left: 40%;
+    background-color: white;
 }
 .notifications{
     padding: 15px;
@@ -605,3 +762,268 @@ hr{
     width:16px;
     border-radius: 50%;
 }
+.profilePart:hover{
+    color: black;
+}
+.followersContainer{
+    width:40%;
+    height: 70%;
+    background-color: white;
+    border-radius: 15px;
+    align-self: center;
+    padding: 15px;
+    overflow: hidden;
+}
+.followLabel{
+    display: flex;
+    gap: 20px;
+}
+.followerList{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0px;
+    height: 100%;
+    overflow-y: scroll;
+}
+.singleFollower, .singleFollowerTop{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.singleFollower{
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 15px;
+}
+.singleFollower:hover{
+    background-color: rgb(209, 202, 202);
+}
+.followProfilePic{
+    width:70px;
+    border-radius: 50%;
+}
+.profileData{
+    text-align: start;
+}
+.Unfollow:hover{
+    background-color: rgb(27, 26, 26);
+    color: white;
+}
+.Follow:hover{
+    background-color: rgb(27, 26, 26);
+    color: white;
+}
+#following, #followers{
+    font-size: 22px;
+    color: rgb(175, 172, 172);
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+#newMessageTitle{
+    font-size: 22px;
+    color: rgb(175, 172, 172);
+    padding-bottom: 10px;
+}
+.postProfilePic{
+    height: 40px;
+    border-radius: 50%;
+}
+.postTopPart{
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+.singlePostHome{
+    display: flex;
+    flex-direction: column;
+    width:90%;
+    gap: 5px;
+    -webkit-box-shadow: 0 0 6px rgb(175, 172, 172);
+    box-shadow: 0 0 6px rgb(175, 172, 172);
+    border-radius: 15px;
+    animation: fadeIn 4s;
+}
+.Posts{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.imgHomeContainer{
+    position: relative;
+    width:100%;
+}
+.imgNotContainer{
+    position: relative;
+    width:30px;
+}
+.imgHomeContainer:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+.imgHomeContainer2:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+.fullImgHome, .notificationImg{
+    position: absolute; 
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; 
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+    object-position: center;
+}
+.postIcon{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+}
+.share{
+    cursor: pointer;
+    font-size: 20px;
+}
+#addComment{
+    font-size: 16px;
+}
+.externalProfile{
+    margin-top: 70px;
+}
+.singleNotification{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap:50px;
+}
+.actualNotification{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.directContent{
+    margin-top: 70px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 88%;
+    width: 100%;
+}
+.topDataDirect,.topDataDirect2{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 15px;
+    border-bottom: 1px solid rgb(209, 202, 202);
+}
+.topDataDirect2{
+    border: 0;
+    gap: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+}
+.topDataDirect2:hover{
+    background-color: rgb(243, 237, 237);
+}
+.sideBar{
+    border-right: 1px solid rgb(209, 202, 202); 
+}
+.directTop{
+    display: flex;
+    gap: 30px;
+}
+.sendMessage{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    bottom: 10px;
+    padding:15px;
+}
+.messageContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+#message{
+    width: 100%;
+    color: black;
+}
+#iconNew{
+    cursor: pointer;
+}
+.messagesContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+}
+.singleMessage{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+.actualMessage, .actualMessage2{
+    border-radius: 15px;
+    background-color: rgb(212, 211, 211);
+    padding: 10px;
+    text-align: start;
+    width:max-content;
+}
+.actualMessage2{
+    justify-self: flex-end;
+}
+.messageSvg{
+    height: 22px;
+}
+@keyframes fadeIn {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+  @keyframes fadeOut {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #888 white  ;
+  }
+   /* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  } 

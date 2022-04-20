@@ -26,7 +26,7 @@ import {getAuth} from 'firebase/auth';
   library.add(faImage, faXmark);
 
 
-function NewPost({closeUploadForm, data, profilePosts,recovePost}) {
+function NewPost({closeUploadForm, data, profilePosts,recovePost,from, oldUser}) {
   const post = useRef(null)
   const [postUrl,setPostUrl] = useState();
   const [postFile, setPostFile] = useState();
@@ -77,8 +77,13 @@ function NewPost({closeUploadForm, data, profilePosts,recovePost}) {
         }
         setLoading(false);
         closeForm();
-        profilePosts();
-        recovePost();
+        if(from === 'Home'){
+            oldUser();
+            recovePost();
+        }
+        else{
+            profilePosts();
+        }
     }
   }
 

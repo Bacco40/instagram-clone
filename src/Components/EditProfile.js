@@ -1,5 +1,6 @@
 import React,{useEffect, useRef, useState} from "react";
 import loadingGif from './loading.gif';
+import{useNavigate}from "react-router-dom";
 import {
   getAuth
 } from 'firebase/auth';
@@ -21,7 +22,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faPenToSquare} from '@fortawesome/free-regular-svg-icons';
-library.add(faPenToSquare);
+import{faXmark} from '@fortawesome/free-solid-svg-icons';
+library.add(faPenToSquare,faXmark);
 
 function EditProfile({data, getUserData}) {
   const inputBackground = useRef(null);
@@ -33,6 +35,7 @@ function EditProfile({data, getUserData}) {
   const [type, setType] = useState(0);
   const [type2, setType2] = useState(0);
   const [loading,setLoading] = useState(false);
+  const navigate = useNavigate();
 
   function startAtTop(){
     window.scroll({
@@ -130,6 +133,9 @@ function EditProfile({data, getUserData}) {
   return (
     <div className="createUserContent">
         <div className="createUserForm">
+            <div id="formTopEdit">
+                <div className="profileUserHome" ><FontAwesomeIcon icon="fa-solid fa-xmark" className="xMark" onClick={() => navigate(-1)}/></div>
+            </div>
             <form className="editForm">
                 <div className="backgroundForm" onClick={onImgClick}>
                     <img id="backgroundForm" src={type === 1 ? backgroundUrl : data.coverPic} alt="background pic" onMouseEnter={(e) => imgEffect(e)} onMouseLeave={(e) => imgEffect2(e) } />

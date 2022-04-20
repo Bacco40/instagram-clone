@@ -8,7 +8,7 @@ import{faEllipsisH, faXmark, faShareNodes} from '@fortawesome/free-solid-svg-ico
 import{faHeart, faComment,faPaperPlane, faTrashCan} from '@fortawesome/free-regular-svg-icons';
 library.add( faHeart, faComment,faEllipsisH, faPaperPlane,faXmark, faTrashCan,faShareNodes);
 
-function HomePost({post,data,oldUser}) {
+function HomePost({post,data,oldUser,setLoading}) {
   const [accountMasterId,setAccountMasterId] = useState();
   const [userPost,setUserPost] = useState();
   const [commentData,setCommentData] = useState();
@@ -59,10 +59,11 @@ function HomePost({post,data,oldUser}) {
 
     async function copyUrl(){
         navigator.clipboard.writeText(`/instagram-clone/${currentPostId}`);
+        document.querySelector(`.deletePost2[name="${post.picture}"]`).style.cssText="display:none;"; 
     }
 
     async function deletePost(){
-        const postRef=doc(getFirestore(), "Accounts", `${currentPostId}`);
+        const postRef=doc(getFirestore(), "Posts", `${currentPostId}`);
         await deleteDoc(postRef);
         const accountRef=doc(getFirestore(), "Accounts", `${accountMasterId}`);
         await updateDoc(accountRef,{
@@ -70,6 +71,9 @@ function HomePost({post,data,oldUser}) {
                 postId: postRef.id
             })
         });
+        document.querySelector(`.deletePost2[name="${post.picture}"]`).style.cssText="display:none;"; 
+        setLoading(true);
+        oldUser();
     }
 
   function openMenu(){
@@ -121,6 +125,7 @@ function HomePost({post,data,oldUser}) {
             })
         });
         setNotification(notification+1);
+        setLoading(true);
     }
     if(!data){
         navigate('/register');
@@ -137,6 +142,7 @@ function HomePost({post,data,oldUser}) {
             })
         });
         setNotification(notification+1);
+        setLoading(true);
     }
   }
 
@@ -196,6 +202,7 @@ function HomePost({post,data,oldUser}) {
             })
         });
         setNotification(notification+1);
+        setLoading(true);
     }
     if(!data){
         navigate('/register');
@@ -215,6 +222,10 @@ function HomePost({post,data,oldUser}) {
         currentUserLiked();
         checkAccountMaster();
         recoveCommenterData();
+    }
+    if(post){
+        recoveUserPost();
+        recovePostId(); 
     }
   },[data,post])
   

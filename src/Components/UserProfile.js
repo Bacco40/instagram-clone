@@ -1,36 +1,24 @@
 import React,{useEffect, useState} from "react";
 import { useParams, useNavigate} from 'react-router-dom';
 import Followers from './Followers';
-import {Link} from 'react-router-dom';
 import UserPost from './UserPost';
+import comment from './message.svg';
 import loadingGif from './loading2.gif';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  getAuth,
-  onAuthStateChanged,  
-} from 'firebase/auth';
 import {
   getFirestore,
   collection,
   query,
   getDocs,
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
   where
 } from 'firebase/firestore';
-import{faComment} from '@fortawesome/free-regular-svg-icons';
-import { async } from "@firebase/util";
-library.add(faComment);
 
-function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,removeFollow,openFollow,data}) {
+function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,removeFollow,openFollow,data, messageUserProfile}) {
   const {username} = useParams();
   const [userData, setUserData] = useState();
   const [postsData,setPostsData] = useState();
   const [userFollowed,setUserFollowed] = useState();
   const [idAccount,setIdAccount] = useState();
+  const [idProfile,setIdProfile] = useState();
   const [loading,setLoading] = useState(true);
   let redirect =useNavigate();
 
@@ -47,6 +35,7 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
     const querySnapshot = await getDocs(userData2);
     querySnapshot.forEach((doc) => {
       setUserData(doc.data());
+      setIdProfile(doc.id);
     });
   }
 
@@ -162,7 +151,7 @@ function UserProfile({closeFollow,openFollowing,setOpenFollowing,addFollow,remov
               <img className="profilePicBig" src={userData.profilePic} alt="profile pic" referrerPolicy="no-referrer"/> 
               <div className="profileButtons">
                 <button className="followNewProfile" id={userData.username} onClick={(e) => clickFollow(e)}>{loading === true ? <img src={loadingGif} className="loadingGif2" alt="loading..."/> : userFollowed}</button>
-                <button id="newMessage" > <FontAwesomeIcon icon="fa-regular fa-comment" /> </button>
+                <button id="newMessage" name={idProfile} onClick={(e) => messageUserProfile(e)}> <img className="messageSvg" name={idProfile} src={comment} alt="message"/> </button>
               </div>
             </div>
             <div className="profileContents">

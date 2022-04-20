@@ -6,27 +6,13 @@ import{faXmark} from '@fortawesome/free-solid-svg-icons';
 import{faImage} from '@fortawesome/free-regular-svg-icons';
 import Follow from './Follow';
 import Following from './Following';
-import {getAuth} from 'firebase/auth';
   import {
     getFirestore,
     collection,
-    FieldPath,
-    addDoc,
-    updateDoc,
-    serverTimestamp,
     query,
-    doc,
     where,
-    getDocs,
-    arrayUnion
+    getDocs
   } from 'firebase/firestore';
-  import {
-    getStorage,
-    ref,
-    uploadBytesResumable,
-    getDownloadURL
-  } from 'firebase/storage';
-import { async } from "@firebase/util";
   library.add(faImage, faXmark);
 
 
@@ -142,11 +128,11 @@ function Followers({closeFollow, data, openFollowing, setOpenFollowing,addFollow
                   </div>
                 </div>
                 {account.followers.map((followers,index) => (
-                  <>
+                  <React.Fragment key={index}>
                     {followers.id === accountId &&
-                      <button className="Unfollow" key={index} id={account.username} onClick={(e) => removeFollow(e,accountId)}>Unfollow</button>
+                      <button className="Unfollow" id={account.username} onClick={(e) => removeFollow(e,accountId)}>Unfollow</button>
                     }
-                  </>
+                  </React.Fragment>
                 ))}
                 <Follow accountUsername={account.username} addFollow={addFollow} accountId={accountId} userMail={userMail}/>        
               </Link>

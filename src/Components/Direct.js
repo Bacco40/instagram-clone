@@ -1,22 +1,24 @@
 import React,{useEffect, useState} from "react";
 import Message from './Message';
+import loadingGif from './loading2.gif';
 import {getFirestore,collection,getDocs,where,query,doc,getDoc,updateDoc,arrayUnion,setDoc} from 'firebase/firestore';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faPenToSquare} from '@fortawesome/free-solid-svg-icons';
 import{faPaperPlane} from '@fortawesome/free-regular-svg-icons';
-import { async } from "@firebase/util";
 library.add(faPenToSquare,faPaperPlane);
 
-function Direct({data, closeFollow, openDirect}) {
+function Direct({data, closeFollow, openDirect,messageUser,setMessageUser}) {
   const [tempMessageUser, setTempMessageUser] = useState();
   const [tempUserData,setTempUserData] = useState();
+  const [prevTempUser,setPrevTempUser] = useState();
   const [selected,setSelected] = useState();
   const [prevSelected, setPrevSelected] = useState();
   const [accountMasterId,setAccountMasterId] = useState();
   const [userMessaged,setUserMessaged] = useState();
   const [messageContent, setMessageContent] = useState();
   const [selectedData,setSelectedData] = useState();
+  const [loading,setLoading] = useState(true);
 
   function startAtTop(){
     window.scroll({
@@ -29,9 +31,23 @@ function Direct({data, closeFollow, openDirect}) {
   async function recoveUserData(){
     const docRef = doc(getFirestore(), "Accounts", `${tempMessageUser}`);
     const docSnap = await getDoc(docRef);
-    setTempUserData(docSnap.data());
-    setPrevSelected(selected);
-    setSelected(tempMessageUser);
+    let isIn= 0;
+    if(userMessaged !== undefined){
+      userMessaged.map((user) => {
+        if(user[1] === docSnap.id){
+          isIn++;
+        }
+      })
+    }
+    if(isIn=== 0){
+      setPrevTempUser(tempMessageUser)
+      setTempUserData(docSnap.data());
+      setPrevSelected(selected);
+      setSelected(tempMessageUser);
+    }else{
+      setPrevSelected(selected);
+      setSelected(tempMessageUser);
+    }
   }
 
   async function recoveAccountMaster(){
@@ -46,29 +62,32 @@ function Direct({data, closeFollow, openDirect}) {
     const messages = doc(getFirestore(), 'Messages',`${accountMasterId}`);
     let docSnap = await getDoc(messages);
     docSnap=docSnap.data();
-    let arrayUser = [] ;
-    let arrayUserDetail = [] ;
-    let arrayUserDetailTemp = [] ;
-    let index = 0;
-    for(let i=0;i<docSnap.Messages.length;i++){
-      let isIn=false;
-      for(let a=0;a<arrayUser.length;a++){
-        if(arrayUser[a] === docSnap.Messages[i].chatWith){
-          isIn=true;
+    if(docSnap!== undefined){
+      let arrayUser = [] ;
+      let arrayUserDetail = [] ;
+      let arrayUserDetailTemp = [] ;
+      let index = 0;
+      for(let i=0;i<docSnap.Messages.length;i++){
+        let isIn=false;
+        for(let a=0;a<arrayUser.length;a++){
+          if(arrayUser[a] === docSnap.Messages[i].chatWith){
+            isIn=true;
+          }
+        }
+        if(isIn === false){
+          arrayUser[index]=docSnap.Messages[i].chatWith;
+          index++;
         }
       }
-      if(isIn === false){
-        arrayUser[index]=docSnap.Messages[i].chatWith;
-        index++;
+      for(let b=0;b<arrayUser.length;b++){
+        const accountRef = doc(getFirestore(), 'Accounts',`${arrayUser[b]}`);
+        const Snap = await getDoc(accountRef);
+        arrayUserDetailTemp[0]=Snap.data();
+        arrayUserDetail[b]=arrayUserDetailTemp.concat(arrayUser[b])
       }
+      setUserMessaged(arrayUserDetail);
     }
-    for(let b=0;b<arrayUser.length;b++){
-      const accountRef = doc(getFirestore(), 'Accounts',`${arrayUser[b]}`);
-      const Snap = await getDoc(accountRef);
-      arrayUserDetailTemp[0]=Snap.data();
-      arrayUserDetail[b]=arrayUserDetailTemp.concat(arrayUser[b])
-    }
-    setUserMessaged(arrayUserDetail);
+    
   }
 
   async function newMessage(){
@@ -135,19 +154,23 @@ function Direct({data, closeFollow, openDirect}) {
 
   async function recoveMessage(){
     if(selected){
+      setLoading(true)
       let arrayMessage = [];
       let index = 0;
       let messageRef=doc(getFirestore(), "Messages", `${accountMasterId}`);
       const querySnapshot = await getDoc(messageRef);
       messageRef = querySnapshot.data();
-      for(let i=0;i<messageRef.Messages.length;i++){
-        if(messageRef.Messages[i].chatWith === selected){
-          arrayMessage[index]=messageRef.Messages[i];
-          index++;
+      if(messageRef !== undefined){
+        for(let i=0;i<messageRef.Messages.length;i++){
+          if(messageRef.Messages[i].chatWith === selected){
+            arrayMessage[index]=messageRef.Messages[i];
+            index++;
+          }
         }
+        arrayMessage.sort((a,b) => a.timestamp - b.timestamp); 
+        setMessageContent(arrayMessage);
       }
-      arrayMessage.sort((a,b) => a.timestamp - b.timestamp); 
-      setMessageContent(arrayMessage);
+      setLoading(false);
     }
   }
 
@@ -159,6 +182,12 @@ function Direct({data, closeFollow, openDirect}) {
     }
   }
 
+  function sendMessageEnter(e){
+    if (e.key === 'Enter') {
+        newMessage();
+    }
+  }
+
   useEffect(()=>{
     if(userMessaged){
       userMessaged[0].map((user) => (setSelected(user)))
@@ -167,12 +196,12 @@ function Direct({data, closeFollow, openDirect}) {
 
   useEffect(()=>{
     if(selected ){
-      recoveMessage();
-      recoveSelectedData();
       if(document.querySelector(`.topDataDirect2[id="${prevSelected}"]`)){
         document.querySelector(`.topDataDirect2[id="${prevSelected}"]`).style.cssText="background-color:white;";
       }
       document.querySelector(`.topDataDirect2[id="${selected}"]`).style.cssText="background-color: rgb(243, 237, 237);";
+      recoveMessage();
+      recoveSelectedData();
     }
   },[selected])
 
@@ -195,6 +224,13 @@ function Direct({data, closeFollow, openDirect}) {
   },[data])
 
   useEffect(()=>{
+    if(messageUser && userMessaged){
+      setTempMessageUser(messageUser);
+      setMessageUser();
+    }
+  },[messageUser,userMessaged])
+
+  useEffect(()=>{
     startAtTop();
   },[])
 
@@ -211,12 +247,12 @@ function Direct({data, closeFollow, openDirect}) {
               </div>
             </div>
             <div className="userToMessage">
-              {tempUserData && !document.querySelector(`.topDataDirect2[id="${selected}"]`) &&
-                <div className="topDataDirect2" id={tempMessageUser}>
-                  <img className="homeProfilePic" id={tempMessageUser} src={tempUserData.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
-                  <div className="profileData" id={tempMessageUser}>
-                      <div className="profileNameHome" id={tempMessageUser}>{tempUserData.name}</div>
-                      <div className="profileUserHome" id={tempMessageUser}>@{tempUserData.username}</div>
+              {tempUserData && 
+                <div className="topDataDirect2" id={prevTempUser} onClick={(e) => selectUserToMessage(e)}>
+                  <img className="homeProfilePic" id={prevTempUser} src={tempUserData.profilePic} alt="profile pic" referrerPolicy="no-referrer"/>
+                  <div className="profileData" id={prevTempUser}>
+                      <div className="profileNameHome" id={prevTempUser}>{tempUserData.name}</div>
+                      <div className="profileUserHome" id={prevTempUser}>@{tempUserData.username}</div>
                   </div>
               </div>
               }
@@ -233,7 +269,7 @@ function Direct({data, closeFollow, openDirect}) {
           </div>
           <div className="messageContainer">
             <div className="messagesContainer">
-              {messageContent && selectedData && messageContent.map((message,index)=>(
+              {messageContent && loading === false && selectedData && messageContent.map((message,index)=>(
                 <div className="singleMessage" key={index}>
                   {message.idSender === selected &&
                     <img src={selectedData.profilePic} className="commentPic" alt="profile pic"/>
@@ -241,15 +277,23 @@ function Direct({data, closeFollow, openDirect}) {
                   {message.idSender !== selected &&
                     <div></div>
                   }
-                  <div className="actualMessage">{message.message}</div>
+                  {message.idSender === selected &&
+                    <div className="actualMessage">{message.message}</div>
+                  }
+                  {message.idSender === accountMasterId &&
+                    <div className="actualMessage2">{message.message}</div>
+                  }
                   {message.idSender === accountMasterId &&
                     <img src={data.profilePic} className="commentPic" alt="profile pic"/>
                   }
                 </div>
               ))}
+              {loading === true && selected &&
+                <img src={loadingGif} className="loadingGif3" alt="loading..."/>
+              }
             </div>
             <div className="sendMessage">
-              <input type="text" className="search" id="message" placeholder="New Message..."/>
+              <input type="text" className="search" id="message" placeholder="New Message..." onKeyDown={(e) => sendMessageEnter(e)}/>
               <FontAwesomeIcon icon="fa-regular fa-paper-plane" onClick={newMessage}/>
             </div>
           </div>

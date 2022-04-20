@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useState,useEffect} from "react";
 import {Link} from 'react-router-dom';
 import NewPost from './NewPost';
 import Followers from './Followers';
+import loadingGif from './loading.gif';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import{faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 library.add(faCirclePlus);
 
 function LogIn({oldUserLog,recovePost,logged, data, signOutUser, openUploadForm, closeUploadForm,
-  closeFollow,openFollowing,setOpenFollowing,addFollow,removeFollow,openFollow}) {
+  closeFollow,openFollowing,setOpenFollowing,addFollow,removeFollow,openFollow,from,oldUser,loadingHome}) {
+
+  const [loading,setLoading] = useState(true);
+
+  function logInClick(e){
+    loadingHome(true);
+    oldUserLog(e);
+  }
+
+  useEffect(()=>{
+    if(logged === true && data){
+      setLoading(false)
+    }
+  },[data,logged])
 
   return (
     <div className="logIn">
@@ -17,10 +31,10 @@ function LogIn({oldUserLog,recovePost,logged, data, signOutUser, openUploadForm,
           <Link className='register' to='/register' >
               <button id="signUp"> Sign Up </button>
           </Link>
-          <button id="logIn" onClick={oldUserLog}> Log In </button>
+          <button id="logIn" onClick={(e)=>logInClick(e)}> Log In </button>
         </div>
       }
-      {logged === true && data &&
+      {logged === true && data && loading === false &&
         <div className="logIn">
           <div className="profileDetail">
             <Link className="topData" to='/profile'>
@@ -53,7 +67,12 @@ function LogIn({oldUserLog,recovePost,logged, data, signOutUser, openUploadForm,
           <button id="signUp" onClick={signOutUser}>Log Out</button>
       </div>
       }  
-      <NewPost closeUploadForm={closeUploadForm} data={data} recovePost={recovePost}/>
+      {loading === true && logged === true &&
+        <div className="profileDetail">
+          <img src={loadingGif} className="loadingGif" alt="loading..."/>
+        </div>
+      }
+      <NewPost closeUploadForm={closeUploadForm} data={data} recovePost={recovePost} from={from} oldUser={oldUser}/>
       <Followers 
           closeFollow={closeFollow} 
           data={data} 

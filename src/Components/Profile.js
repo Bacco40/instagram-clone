@@ -88,6 +88,7 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
       array[index] =mail.concat(picture,profilePic,username,name,likes,comments,description,date,link,id);
       index++;
     });
+    array.sort((a,b) => b[8] - a[8]);
     setPostsData(array);
   }
 
@@ -149,7 +150,6 @@ function Profile({openUploadForm, closeUploadForm, setLogged, data, selected, se
     });
     initialFirebaseAuth();
   }
-
 
   useEffect(()=>{
     startAtTop();
