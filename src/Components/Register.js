@@ -8,7 +8,7 @@ function Register({newUser, oldUserLog}) {
   function LogInClick(e){
     e.preventDefault();
     oldUserLog(e);
-    redirect('/instagram-clone');
+    redirect('/');
   }
 
   function startAtTop(){

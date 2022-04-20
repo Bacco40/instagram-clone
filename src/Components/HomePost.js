@@ -253,7 +253,7 @@ function HomePost({post,data,oldUser,setLoading}) {
                     </div>
                 </div>
             </div>
-            <Link className="imgHomeContainer" to={`/instagram-clone/${currentPostId}`}>
+            <Link className="imgHomeContainer" to={`/${currentPostId}`}>
                 <img className="fullImgHome"src={post.picture} alt={post.description}/>
             </Link>
             <div className="postIcon">
@@ -274,7 +274,7 @@ function HomePost({post,data,oldUser,setLoading}) {
                 {post.description}
             </div>
             {commentData !== undefined && commentData.length>2 && 
-                <Link className="commentNumber" to={`/instagram-clone/${currentPostId}`}>View all {commentData.length} comments</Link>
+                <Link className="commentNumber" to={`/${currentPostId}`}>View all {commentData.length} comments</Link>
             }
             {commentData !== undefined && commentData.length<=1 && 
                 <div className="commentNumber"> {commentData.length} comment</div>

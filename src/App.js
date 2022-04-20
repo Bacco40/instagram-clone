@@ -279,7 +279,7 @@ function App() {
     <div className="App">
       <Navbar pageSelected={(e)=>pageSelected(e)} data={data} oldUser={oldUser} signOutUser={signOutUser}/>
       <Routes>
-        <Route path='/instagram-clone' element={
+        <Route path='/' element={
           <Home 
             oldUserLog={(e)=>oldUserLog(e)} 
             logged={logged} 
@@ -322,7 +322,7 @@ function App() {
             setNewUserLog={setNewUserLog}
           />
         }/>  
-        <Route path='/instagram-clone/:id' element={<OpenPost data={data} oldUser={oldUser}/>}/>
+        <Route path='/:id' element={<OpenPost data={data} oldUser={oldUser}/>}/>
         <Route path='/editProfile' element={<EditProfile data={data} getUserData={getUserData}/>}/> 
         <Route path='/profile/:username' element={
           <UserProfile

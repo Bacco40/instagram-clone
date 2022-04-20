@@ -16,7 +16,7 @@ initializeApp({
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter basename='/'>
+    <BrowserRouter basename='/instagram-clone'>
       <App />
     </BrowserRouter>
   </React.StrictMode>,

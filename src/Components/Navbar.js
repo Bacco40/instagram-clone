@@ -197,7 +197,7 @@ function NavbarStart({pageSelected, data, oldUser,signOutUser}) {
 
   return (
     <nav className="homeNav">
-        <Link className='siteName' to='/instagram-clone'>
+        <Link className='siteName' to='/'>
             <div className="Title" id="Title" onClick={pageSelected}>
                 <img className="logo" id="Title"  src={logo} alt="Instagram logo"/>
                 <div className="pagTitle" id="Title" >Instagram</div>
@@ -227,7 +227,7 @@ function NavbarStart({pageSelected, data, oldUser,signOutUser}) {
             </div> 
         </div>
         <ul className="userOptions">           
-            <Link className='Home' to='/instagram-clone'>
+            <Link className='Home' to='/'>
                 <li className='list'> <FontAwesomeIcon className='Home' id="Home" icon="fa-solid fa-house" onClick={pageSelected}/></li>
             </Link>
             <Link className='Direct'  to= {data ?'/direct' : '/register'}>
@@ -250,7 +250,7 @@ function NavbarStart({pageSelected, data, oldUser,signOutUser}) {
                             </Link>  
                             <div className="actualComment">{notification[2]} your Post</div>
                           </div>
-                          <Link className="imgNotContainer" to={`/instagram-clone/${notification[3]}`}>
+                          <Link className="imgNotContainer" to={`/${notification[3]}`}>
                             <img className="notificationImg"src={notification[1].picture} alt={notification[1].description}/>
                           </Link>
                         </div>
