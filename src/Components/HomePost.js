@@ -58,7 +58,7 @@ function HomePost({post,data,oldUser,setLoading}) {
     }
 
     async function copyUrl(){
-        navigator.clipboard.writeText(`/instagram-clone/${currentPostId}`);
+        navigator.clipboard.writeText(`https://bacco40.github.io/instagram-clone/${currentPostId}`);
         document.querySelector(`.deletePost2[name="${post.picture}"]`).style.cssText="display:none;"; 
     }
 
