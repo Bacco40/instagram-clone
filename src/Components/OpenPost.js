@@ -170,6 +170,7 @@ function openMenu(){
 
 function copyUrl(){
     navigator.clipboard.writeText(window.location.href);
+    document.querySelector('.deletePost').style.cssText="display:none;"; 
 }
 
 async function deletePost(){
