@@ -278,7 +278,7 @@ function App() {
   return (
     <div className="App">
       <Navbar pageSelected={(e)=>pageSelected(e)} data={data} oldUser={oldUser} signOutUser={signOutUser}/>
-      <Routes redirect={redirect}>
+      <Routes>
         <Route path='/instagram-clone' element={
           <Home 
             oldUserLog={(e)=>oldUserLog(e)} 
