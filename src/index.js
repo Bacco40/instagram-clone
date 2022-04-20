@@ -16,7 +16,7 @@ initializeApp({
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter basename='/'>
       <App />
     </BrowserRouter>
   </React.StrictMode>,
